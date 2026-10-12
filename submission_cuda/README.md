@@ -1,11 +1,13 @@
 # Assignment 2 CUDA run and validation / 作业 2 CUDA 运行与验证
 
-This is the runbook for the **`assignment2/cuda-notebook-redesign` branch**. The notebooks are training code, not proof that training has already completed.  
+This is the runbook for the **`assignment2/cuda-notebook-redesign` branch**. The notebooks are training code, not proof that training has already completed.
+
 本文用于 **`assignment2/cuda-notebook-redesign` 分支**。Notebook 中的训练目标只是代码设置，不能当作已完成的训练结果。
 
 ## 1. Files and order / 文件与运行顺序
 
-Run from the repository root, top to bottom, in separate notebook kernels. Do not combine historical output files with a new run.  
+Run from the repository root, top to bottom, in separate notebook kernels. Do not combine historical output files with a new run.
+
 在仓库根目录打开项目；三本 notebook 分别选择内核、从上到下运行。不要把历史输出文件与新实验混用。
 
 | Notebook | Purpose / 用途 | Expected new evidence / 应产生的新证据 |
@@ -14,7 +16,8 @@ Run from the repository root, top to bottom, in separate notebook kernels. Do no
 | `CartPole_DQN_PPO_CUDA.ipynb` | Custom ANN + DQN/PPO / 自定义 ANN 与两种算法 | Separate episode counts, evaluations, figures, two MP4s / 独立回合数、评估、图、两个 MP4 |
 | `Pendulum_Q_Learning.ipynb` | Discretised TD Q-Learning / 离散化 TD Q-Learning | Q-table, curve, baseline comparison, one MP4 / Q 表、曲线、随机基线对比、一个 MP4 |
 
-`build_cuda_submission.py` regenerates all three notebooks and **overwrites their saved cell outputs**. Run it only before training, never after you have executed and saved the final notebooks.  
+`build_cuda_submission.py` regenerates all three notebooks and **overwrites their saved cell outputs**. Run it only before training, never after you have executed and saved the final notebooks.
+
 `build_cuda_submission.py` 会重新生成三本 notebook，**覆盖其中已保存的运行输出**。只在训练前运行，不要在最终运行并保存后再次运行。
 
 ## 2. Before training / 训练前检查
@@ -33,7 +36,8 @@ python -c "import sys, torch; print(sys.executable, torch.__version__, torch.ver
 python -c "import gymnasium as gym, ale_py; gym.register_envs(ale_py); e=gym.make('ALE/Breakout-v5'); print(e.observation_space, e.action_space); e.close()"
 ```
 
-The source notebook used as a reference had machine-specific Python and output paths. These new notebooks use the selected kernel and `Path.cwd()`; do not copy those old absolute paths back in.  
+The source notebook used as a reference had machine-specific Python and output paths. These new notebooks use the selected kernel and `Path.cwd()`; do not copy those old absolute paths back in.
+
 参考 notebook 写死了另一台机器的 Python 和输出路径；新版使用当前内核及 `Path.cwd()`，不要再复制旧的绝对路径。
 
 ## 3. Required training evidence / 必须核对的训练证据
@@ -46,15 +50,18 @@ The source notebook used as a reference had machine-specific Python and output p
 | CartPole PPO | 10,000 episodes | Logged completed episodes ≥ 1,000 / 实际记录的完整回合至少 1,000 |
 | Pendulum Q-Learning | 50,000 episodes in copied notebook | Executed episode count ≥ 1,000 and Q-table/curve/evaluation exist / 实际完成至少 1,000 回合，并有 Q 表、曲线与评估 |
 
-The Atari **one-million-time-step** interpretation comes from the course clarification supplied with the assignment; the PDF wording alone says “1,000,000 for Atari.” The target values above exceed the minimum but are not themselves execution evidence.  
+The Atari **one-million-time-step** interpretation comes from the course clarification supplied with the assignment; the PDF wording alone says “1,000,000 for Atari.” The target values above exceed the minimum but are not themselves execution evidence.
+
 Atari **100 万时间步**的口径依据课程补充说明；PDF 本身写的是“1,000,000 for Atari”。上表目标高于最低要求，但配置值不能代替实际运行输出。
 
 ## 4. Breakout PPO change to verify / Breakout PPO 改动的验证
 
-Previous run: one environment, `n_steps=128`, `batch_size=128`, fixed learning rate `2.5e-4`; its 30-episode final evaluation was **13.43 ± 3.90**. This is historical context, not a directly comparable control because the new evaluation uses specified fixed seeds.  
+Previous run: one environment, `n_steps=128`, `batch_size=128`, fixed learning rate `2.5e-4`; its 30-episode final evaluation was **13.43 ± 3.90**. This is historical context, not a directly comparable control because the new evaluation uses specified fixed seeds.
+
 旧实验使用单环境、`n_steps=128`、`batch_size=128`、固定学习率 `2.5e-4`，30 回合最终评估为 **13.43 ± 3.90**。这只是历史背景；新版采用固定种子，不能直接拿两个数字宣称提升。
 
-New proposal: `n_steps=2048`, `batch_size=256`, four epochs, learning-rate decay, evaluation every 200,000 steps on ten fixed seeds, and best-model selection only after one million training steps. These are hypotheses to test, **not proven causes or guaranteed improvements**.  
+New proposal: `n_steps=2048`, `batch_size=256`, four epochs, learning-rate decay, evaluation every 200,000 steps on ten fixed seeds, and best-model selection only after one million training steps. These are hypotheses to test, **not proven causes or guaranteed improvements**.
+
 新方案：`n_steps=2048`、`batch_size=256`、四轮更新、学习率递减、每 20 万步用十个固定种子评估，并且只在训练满 100 万步后选最佳模型。这些是待验证的方案，**不是已证实的原因或效果保证**。
 
 - [ ] Check that the periodic **raw-reward** evaluation curve trends upward or stabilises, and inspect dips rather than quoting only the best point. / 查看阶段评估的**原始奖励**曲线是否上升或稳定，也要分析下降区间，不能只报最高点。
@@ -62,7 +69,8 @@ New proposal: `n_steps=2048`, `batch_size=256`, four epochs, learning-rate decay
 - [ ] If claiming improvement over the old PPO, re-evaluate the old checkpoint under the **same new protocol**. If unavailable, state that the historical 13.43 result is not a controlled comparison. / 若要声称优于旧 PPO，必须用**同一套新评估流程**重评旧模型；做不到就明确历史的 13.43 不是严格对照。
 - [ ] If PPO is still weak, report the result honestly. A suggested follow-up is a controlled run changing **one** hyperparameter group at a time, not a claim that more steps will necessarily solve it. / 若 PPO 仍弱，应如实报告；后续对照实验应每次只调整一组参数，而不能断言增加训练步数一定有效。
 
-Training Breakout uses **clipped rewards**, while evaluation and random baseline use **raw rewards**. Do not subtract or overlay these values as if they share a unit. New Monitor logs are append-only for a matching resumed run; inspect for accidental duplicates or mixed runs before plotting.  
+Training Breakout uses **clipped rewards**, while evaluation and random baseline use **raw rewards**. Do not subtract or overlay these values as if they share a unit. New Monitor logs are append-only for a matching resumed run; inspect for accidental duplicates or mixed runs before plotting.
+
 Breakout 训练使用**裁剪奖励**，评估与随机基线使用**原始奖励**。不要把两者当同一单位直接相减或叠图。续训日志只应追加同一次实验的数据；画图前检查是否混入重复或别的运行。
 
 ## 5. Figures, evaluation and MP4 / 图表、评估与视频
@@ -79,5 +87,6 @@ Breakout 训练使用**裁剪奖励**，评估与随机基线使用**原始奖�
 - [ ] Back up the ignored `submission_cuda_outputs/` and `pendulum_artifacts/` folders; Git push does not upload the models, CSVs or MP4s. / 备份被 Git 忽略的两个输出目录；推送 Git 不会上传模型、CSV 或 MP4。
 - [ ] Package the notebook ZIP, report PDF (10-page maximum), AI-use declaration and requested simulation video(s) according to Canvas instructions. Download the submitted files once and verify them. / 按 Canvas 要求提交 notebook ZIP、最多十页的 PDF 报告、AI 使用声明及所需模拟视频；提交后下载检查。
 
-For the assignment wording and marking details, use the course specification and Canvas announcements as the authority. This README is an execution checklist, not a replacement for them.  
+For the assignment wording and marking details, use the course specification and Canvas announcements as the authority. This README is an execution checklist, not a replacement for them.
+
 作业文字和评分要求以课程规范及 Canvas 公告为准。本 README 是运行核对清单，不能代替课程说明。
