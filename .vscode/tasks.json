@@ -10,7 +10,7 @@
         "pip",
         "install",
         "-r",
-        "${workspaceFolder}\\requirements.txt"
+        "${workspaceFolder}\\original\\requirements.txt"
       ],
       "problemMatcher": []
     },
@@ -27,7 +27,7 @@
         "notebook",
         "--inplace",
         "--ExecutePreprocessor.timeout=1800",
-        "${workspaceFolder}\\Pendulum_TD_Q_Learning.ipynb"
+        "${workspaceFolder}\\original\\Pendulum_TD_Q_Learning.ipynb"
       ],
       "problemMatcher": [],
       "group": "build"
@@ -37,7 +37,7 @@
       "type": "shell",
       "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
       "args": [
-        "${workspaceFolder}\\execute_checkpoint_notebook.py"
+        "${workspaceFolder}\\original\\execute_checkpoint_notebook.py"
       ],
       "problemMatcher": [],
       "group": "build"
