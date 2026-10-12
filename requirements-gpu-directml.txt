@@ -1,0 +1,11 @@
+torch-directml
+gymnasium[classic-control,atari,accept-rom-license]
+stable-baselines3[extra]
+ale-py
+autorom
+moviepy
+imageio-ffmpeg
+pandas
+matplotlib
+ipykernel
+

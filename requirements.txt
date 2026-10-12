@@ -1,0 +1,12 @@
+gymnasium[classic-control]==1.4.0
+numpy>=2.0,<3
+pandas>=2.2,<4
+matplotlib>=3.9,<4
+moviepy>=2.2,<3
+imageio>=2.37,<3
+imageio-ffmpeg>=0.6,<1
+ipykernel>=7,<8
+nbformat>=5.10,<6
+nbclient>=0.10,<1
+nbconvert>=7.16,<8
+

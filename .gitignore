@@ -1,0 +1,20 @@
+# Local Python and notebook state
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Generated training outputs and checkpoints
+pendulum_artifacts/
+pendulum_student_outputs/
+*.npy
+*.npz
+*.mp4
+*.csv
+
+# Submission archives and temporary files
+*.zip
+tmp/
+
+# Local editor state
+.vscode/*.log

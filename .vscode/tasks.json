@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "RL: Install dependencies",
+      "type": "shell",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "pip",
+        "install",
+        "-r",
+        "${workspaceFolder}\\requirements.txt"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "RL: Run Pendulum notebook",
+      "type": "shell",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "jupyter",
+        "nbconvert",
+        "--execute",
+        "--to",
+        "notebook",
+        "--inplace",
+        "--ExecutePreprocessor.timeout=1800",
+        "${workspaceFolder}\\Pendulum_TD_Q_Learning.ipynb"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "RL: Resume Pendulum 50k to 80k",
+      "type": "shell",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "${workspaceFolder}\\execute_checkpoint_notebook.py"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    }
+  ]
+}
