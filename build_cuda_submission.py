@@ -16,9 +16,13 @@ DEST.mkdir(exist_ok=True)
 
 def notebook(title, sections):
     cells = [nbf.v4.new_markdown_cell(title)]
-    for heading, explanation, code in sections:
-        cells.append(nbf.v4.new_markdown_cell(f"## {heading}\n\n{explanation}"))
-        cells.append(nbf.v4.new_code_cell(code.strip()))
+    cells[0].id = "title"
+    for index, (heading, explanation, code) in enumerate(sections, start=1):
+        section = nbf.v4.new_markdown_cell(f"## {heading}\n\n{explanation}")
+        section.id = f"section-{index}"
+        source = nbf.v4.new_code_cell(code.strip())
+        source.id = f"code-{index}"
+        cells.extend((section, source))
     result = nbf.v4.new_notebook(cells=cells)
     result.metadata["kernelspec"] = {
         "display_name": "Python 3 (CUDA)", "language": "python", "name": "python3"
@@ -585,7 +589,7 @@ nbf.write(notebook("# Assignment 2 — Breakout (CUDA, DQN and PPO)\n\nRun top t
 nbf.write(notebook("# Assignment 2 — CartPole (CUDA, DQN and PPO)\n\nRun top to bottom; save this notebook **with outputs** before submission.", cartpole_sections), DEST / "CartPole_DQN_PPO_CUDA.ipynb")
 
 # The validated Pendulum experiment is kept intact, including its actual outputs.
-pendulum = nbf.read(ROOT / "Pendulum_TD_Q_Learning.ipynb", as_version=4)
+pendulum = nbf.read(ROOT / "original" / "Pendulum_TD_Q_Learning.ipynb", as_version=4)
 nbf.validate(pendulum)
 nbf.write(pendulum, DEST / "Pendulum_Q_Learning.ipynb")
 
